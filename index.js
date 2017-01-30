@@ -133,6 +133,7 @@ var handler = function handler(req, res) {
         res.setHeader('Access-Control-Allow-Headers', 'Content-Type');
         res.setHeader('Expires', new Date(Date.now() + 86400000).toUTCString()); // one day in the future
         var options = handleOptions(res, req);
+        options.followRedirect = false;
         var r = request(options);
         r.pipefilter = function(response, dest) {
             var size = 0;
@@ -151,6 +152,7 @@ var handler = function handler(req, res) {
                     console.log(chalk.magenta('Originated from ' + req.headers['x-forwarded-for']));
                 }*/
             });
+            // console.info(response.headers);
             for (var header in response.headers) {
                 if (!allowedOriginalHeaders.test(header)) {
                     dest.removeHeader(header);
